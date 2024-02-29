@@ -10,7 +10,7 @@ import javax.persistence.Id;
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public class UserDTO {
+    public class User {
         @Id
         private String id;
         private byte[] qrCode;
