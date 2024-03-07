@@ -1,9 +1,9 @@
-package controllers;
+package com.example.erp.controllers;
 
-import Entity.CRAs;
+import com.example.erp.Entity.CRAs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import service.CRAsService;
+import com.example.erp.service.CRAsService;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class CRAsController {
     @Autowired
     private CRAsService crasService;
     @GetMapping(path="/{id}")
-    public CRAs getCRAs(@PathVariable String id) {
+    public CRAs getCRAs(@PathVariable Long id) {
         return crasService.getCRAsById(id);
     }
 
@@ -39,12 +39,12 @@ public class CRAsController {
     }
 
     @DeleteMapping("/delete/{craId}")
-    public void deleteCRAs(@PathVariable String craId) {
+    public void deleteCRAs(@PathVariable Long craId) {
         crasService.deleteCRAs(craId);
     }
 
     @PostMapping("/confirm")
-    public void confirmCRAs(@PathVariable String craId) {
+    public void confirmCRAs(@PathVariable Long craId) {
         CRAs crAs = crasService.getCRAsById(craId); // Suppose que vous avez une méthode pour récupérer un CRAs par ID
         if (crAs != null) {
             crasService.confirmCRAs(crAs);
@@ -54,7 +54,7 @@ public class CRAsController {
     }
 
     @PostMapping("/rejected")
-    public void rejectCRAs(@PathVariable String craId) {
+    public void rejectCRAs(@PathVariable Long craId) {
         CRAs crAs = crasService.getCRAsById(craId); // Suppose que vous avez une méthode pour récupérer un CRAs par ID
         if (crAs != null) {
             crasService.rejectedCRAs(crAs);

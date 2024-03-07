@@ -1,11 +1,14 @@
-package service;
+package com.example.erp.service;
 
 
-import Entity.CRAs;
+import com.example.erp.Entity.CRAs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import repository.CRAsRepository;
+import com.example.erp.repository.CRAsRepository;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -14,7 +17,7 @@ public class CRAsServiceImpl implements CRAsService {
     @Autowired
     private CRAsRepository crasRepository;
     @Override
-    public CRAs getCRAsById(String craId) {
+    public CRAs getCRAsById(Long craId) {
         return crasRepository.findById(craId).orElse(null);
     }
 
@@ -29,8 +32,13 @@ public class CRAsServiceImpl implements CRAsService {
     }
     @Override
     public CRAs createCRAs(CRAs crAs) {
+        LocalDate startDate = crAs.getStartDate();
+        LocalDate endDate = crAs.getEndDate();
+
+        long difference = ChronoUnit.DAYS.between(startDate, endDate);
         // Lors de la création, définissez le statut sur "created"
         crAs.setStatus("created");
+        crAs.setTimeSpent(String.valueOf(difference+" Jours"));
         return crasRepository.save(crAs);
     }
 
@@ -49,14 +57,14 @@ public class CRAsServiceImpl implements CRAsService {
             updatedCRAs.setIdCollaborator(crAs.getIdCollaborator());
             updatedCRAs.setComment(crAs.getComment());
             updatedCRAs.setProductivity(crAs.getProductivity());
+            updatedCRAs.setStatus("Modif");
             return crasRepository.save(updatedCRAs);
         } else {
             throw new RuntimeException("CRAs with ID " + crAs.getCrasId() + " not found");
         }
     }
-
     @Override
-    public void deleteCRAs(String craId) {
+    public void deleteCRAs(Long craId) {
         crasRepository.deleteById(craId);
     }
 
@@ -73,4 +81,5 @@ public class CRAsServiceImpl implements CRAsService {
         crAs.setStatus("rejected");
         crasRepository.save(crAs);
     }
+
 }
